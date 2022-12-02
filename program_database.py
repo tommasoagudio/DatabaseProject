@@ -8,7 +8,7 @@ def load_data(customer_database):
 
     db_name='CustomersDatabase1'
     try:
-        mydb = mysql.connect(host='localhost', user='Alessandro', password='Terracina1!', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+        mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
         if mydb.is_connected():
             mycursor = mydb.cursor()
             mycursor.execute('SHOW DATABASES')
@@ -143,9 +143,39 @@ def load_data(customer_database):
     print("I loaded the dataset and built the database!\n")
 
 def query1():
-    """inser sql code"""
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+        select product_category_name,count(product_category_name) from product
+        GROUP BY
+        product_category_name
+        ORDER BY count(product_category_name) desc
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
 def query2():
-    """inser sql code"""
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+        select count(c.customer_city), c.customer_city from customer as c, order_ as o
+        where c.customer_unique_id = o.order_customer
+        group by c.customer_city
+        order by count(c.customer_city) DESC;
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
 def query3():
     """inser sql code"""
 def query4():
