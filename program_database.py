@@ -142,7 +142,7 @@ def load_data(customer_database):
 
     print("I loaded the dataset and built the database!\n")
 
-def query1():
+def query1(): #returns the number of orders for each product
     import mysql.connector as mysql
     from mysql.connector import Error
     mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
@@ -159,7 +159,7 @@ def query1():
     mycursor.execute(sql)
     result = mycursor.fetchall()
     print(result)
-def query2():
+def query2() : #returns the number of orders for each city
     import mysql.connector as mysql
     from mysql.connector import Error
     mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
@@ -176,12 +176,88 @@ def query2():
     mycursor.execute(sql)
     result = mycursor.fetchall()
     print(result)
-def query3():
-    """inser sql code"""
-def query4():
-    """inser sql code"""
-def query5():
-    """inser sql code"""
+def query3(): #returns the number of orders for each customer
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+    select count(c.customer_id),C.customer_id from customer as c, order_ as o
+    where c.customer_unique_id = o.order_customer
+    group by c.customer_id
+    order by count(c.customer_unique_id) DESC;
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
+def query4(): #returns the avarage number of installments
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+    select avg(o.payment_installments) from order_ as o;
+
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
+def query5(): #returns the payment value, price and installments for each order.
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+    select c.customer_id, o.payment_value, o.payment_installments, o.payment_type from order_ as o, customer as c
+    where c.customer_unique_id = o.order_customer
+    group by c.customer_id, o.payment_installments, o.payment_value,o.payment_type;
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
+
+def query6(): #number of orders for a specific city and a specific payment_type
+
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+    select  count(c.customer_city), c.customer_city, o.payment_type from customer as c, order_ as o
+    where c.customer_unique_id = o.order_customer and c.customer_city = 'sao paulo' and o.payment_type = 'boleto';
+
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
+    
+def query7(): #return the avarage payment value for a specific payment type 
+    import mysql.connector as mysql
+    from mysql.connector import Error
+    mydb = mysql.connect(host='localhost', user='root', password='Verazzano1', auth_plugin='mysql_native_password') # you can add the auth_plugin here too (ref line 26)
+    mycursor = mydb.cursor()
+    mycursor.execute("USE CustomersDatabase1")
+    sql = (mycursor.execute(
+    '''
+    select round(avg(o.payment_value)), o.payment_type from order_ as o
+    where payment_type = 'boleto';
+    '''
+    ))
+    mycursor.execute(sql)
+    result = mycursor.fetchall()
+    print(result)
 
 if __name__=="__main__":
     print("Welcome to our project!\n")
