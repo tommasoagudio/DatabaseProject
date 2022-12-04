@@ -1,7 +1,7 @@
 def load_data(customer_database):
     import pandas as pd
 
-    data = pd.read_csv("customer_segmentation.csv")
+    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -319,7 +319,7 @@ def query6():  # number of orders for a specific city and a specific payment_typ
     from mysql.connector import Error
     import pandas as pd
 
-    data = pd.read_csv("customer_segmentation.csv")
+    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
     possible_cities = []
     possible_payment_types = []
     for city in data["customer_city"]:
@@ -361,7 +361,7 @@ def query7():  # return the avarage payment value for a specific payment type
     from mysql.connector import Error
     import pandas as pd
 
-    data = pd.read_csv("customer_segmentation.csv")
+    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
     possible_payment_types = []
     for payments in data["payment_type"]:
         if payments not in possible_payment_types:
@@ -395,7 +395,7 @@ def query8():
     from mysql.connector import Error
     import pandas as pd
 
-    data = pd.read_csv("customer_segmentation.csv")
+    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
     possible_cities = []
     for city in data["customer_city"]:
         if city not in possible_cities:
