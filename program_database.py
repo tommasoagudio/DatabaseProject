@@ -472,19 +472,19 @@ if __name__ == "__main__":
             continue
         elif choice == "6":
             print(
-                "This query will show the number of orders for your desired city and payment type"
+                "This query will show the number of orders for your desired city and payment type \n"
             )
             query6()
             continue
         elif choice == "7":
             print(
-                "This query will show the avarage payment value for the desired payment type"
+                "This query will show the average payment value for the desired payment type \n"
             )
             query7()
             continue
         elif choice == "8":
             print(
-                "This query will show the customers that have spent at least the desired amount and living in the determined city"
+                "This query will show the customers that have spent at least the desired amount and living in the determined city \n"
             )
             query8()
             continue
