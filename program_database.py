@@ -24,13 +24,11 @@ def load_data(customer_database):
             result = mycursor.fetchall()
             print(result)
             for x in result:
-                if db_name == x[0]:
-                    # mycursor.execute('DROP DATABASE ' + db_name) # delete old database
-                    # mydb.commit() # make the changes official
+                if x[0] == 'customersdatabase1':
                     print("The database already exists!")
                     return None
 
-            mycursor.execute("CREATE DATABASE IF NOT EXISTS" + db_name)
+            mycursor.execute("CREATE DATABASE CustomersDatabase1")
             print("Database is created")
     except Error as e:
         print("Error while connecting to MySQL", e)
