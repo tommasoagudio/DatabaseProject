@@ -191,6 +191,8 @@ def load_data(customer_database):
 def query1():  
     import mysql.connector as mysql
     from mysql.connector import Error
+    import matplotlib.pyplot as plt
+    import pandas as pd
 
     mydb = mysql.connect(
         host="localhost",
@@ -210,6 +212,13 @@ def query1():
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
+    df=pd.DataFrame(result)
+    df.columns=["Categories","Occurencies"]
+    print(df)
+    df.plot(x="Categories", y="Occurencies", kind='bar')
+    plt.xlabel("Categories")
+    plt.ylabel('Number of occurencies')
+    plt.title('Frequence of different Categories')
     for element in result:
         print(element)
 
@@ -217,6 +226,8 @@ def query1():
 def query2():  
     import mysql.connector as mysql
     from mysql.connector import Error
+    import matplotlib.pyplot as plt
+    import pandas as pd
 
     mydb = mysql.connect(
         host="localhost",
@@ -236,6 +247,12 @@ def query2():
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
+    df=pd.DataFrame(result)
+    df.columns=["Occurencies","Cities"]
+    df.plot(x="Cities", y="Occurencies", kind='bar')
+    plt.xlabel("Cities")
+    plt.ylabel('Number of occurencies')
+    plt.title('Frequence of different Cities')
     for element in result:
         print(element)
 
@@ -243,6 +260,8 @@ def query2():
 def query3():  
     import mysql.connector as mysql
     from mysql.connector import Error
+    import matplotlib.pyplot as plt
+    import pandas as pd
 
     mydb = mysql.connect(
         host="localhost",
@@ -262,6 +281,13 @@ def query3():
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
+    df=pd.DataFrame(result)
+    df.columns=["Occurencies","Cities"]
+    print(df)
+    df.plot(x="Cities" , kind='bar')
+    plt.xlabel("Cities")
+    plt.ylabel('Number of occurencies')
+    plt.title('Frequence of different Cities')
     for element in result:
         print(element)
 
@@ -269,6 +295,8 @@ def query3():
 def query4():  
     import mysql.connector as mysql
     from mysql.connector import Error
+    import matplotlib.pyplot as plt
+    import pandas as pd
 
     mydb = mysql.connect(
         host="localhost",
@@ -293,6 +321,7 @@ def query4():
 def query5(): 
     import mysql.connector as mysql
     from mysql.connector import Error
+    import matplotlib.pyplot as plt
 
     mydb = mysql.connect(
         host="localhost",
