@@ -384,6 +384,8 @@ def query6():
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
+    if len(result) == 0:
+        print('There are no results that satisty your input: ',city , amount)
     for element in result:
         print(element)
 
@@ -418,6 +420,8 @@ def query7():
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
+    if len(result) == 0:
+        print('There is no payment type that you wanted: ',payment_type)
     for element in result:
         print(element)
 
