@@ -1,7 +1,8 @@
 def load_data(customer_database):
     import pandas as pd
-
-    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
+    global file_path
+    file_path = input('Please insert the file path for the dataset: ')
+    data = pd.read_csv(file_path+"/customer_segmentation.csv")
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -17,7 +18,7 @@ def load_data(customer_database):
             user=username,
             password=password,
             auth_plugin="mysql_native_password",
-        )  # you can add the auth_plugin here too (ref line 26)
+        ) 
         if mydb.is_connected():
             mycursor = mydb.cursor()
             mycursor.execute("SHOW DATABASES")
@@ -124,14 +125,14 @@ def load_data(customer_database):
                 ]
             ),
         )
-        # print("Record inserted")
+        
         mydb.commit()
     for i, row in data.iterrows():
         sql = "INSERT IGNORE INTO CustomersDatabase1.seller VALUES (%s,%s,%s)"
         mycursor.execute(
             sql, tuple([row["seller_id"], row["seller_city"], row["seller_state"]])
         )
-        # print("Record inserted")
+        
         mydb.commit()
     for i, row in data.iterrows():
         sql = "INSERT IGNORE INTO CustomersDatabase1.product VALUES (%s,%s,%s,%s,%s)"
@@ -142,12 +143,12 @@ def load_data(customer_database):
                     row["product_id"],
                     row["price"],
                     row["freight_value"],
-                    row["product_category_name"],
+                    row["product_category_name_english"],
                     row["product_description_lenght"],
                 ]
             ),
         )
-        # print("Record inserted")
+        
         mydb.commit()
 
     for i, row in data.iterrows():
@@ -172,7 +173,7 @@ def load_data(customer_database):
                 ]
             ),
         )
-        # print("Record inserted")
+        
         mydb.commit()
     df2 = data.loc[:, ["product_id", "seller_id"]]
     df2.drop_duplicates(inplace=True)
@@ -181,13 +182,13 @@ def load_data(customer_database):
         sql = "INSERT IGNORE INTO CustomersDatabase1.offer VALUES (%s,%s,%s)"
         mycursor.execute(sql, tuple([c, row["seller_id"], row["product_id"]]))
         c += 1
-        # print("Record inserted")
+        
         mydb.commit()
 
     print("I loaded the dataset and built the database!\n")
 
 
-def query1():  # returns the number of orders for each product
+def query1():  
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -196,7 +197,7 @@ def query1():  # returns the number of orders for each product
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
@@ -213,7 +214,7 @@ def query1():  # returns the number of orders for each product
         print(element)
 
 
-def query2():  # returns the number of orders for each city
+def query2():  
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -222,7 +223,7 @@ def query2():  # returns the number of orders for each city
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
@@ -239,7 +240,7 @@ def query2():  # returns the number of orders for each city
         print(element)
 
 
-def query3():  # returns the number of orders for each customer
+def query3():  
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -248,7 +249,7 @@ def query3():  # returns the number of orders for each customer
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    )  
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
@@ -265,7 +266,7 @@ def query3():  # returns the number of orders for each customer
         print(element)
 
 
-def query4():  # returns the avarage number of installments
+def query4():  
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -274,7 +275,7 @@ def query4():  # returns the avarage number of installments
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
@@ -289,7 +290,7 @@ def query4():  # returns the avarage number of installments
         print(element)
 
 
-def query5():  # returns the payment value, price and installments for each order.
+def query5(): 
     import mysql.connector as mysql
     from mysql.connector import Error
 
@@ -298,7 +299,7 @@ def query5():  # returns the payment value, price and installments for each orde
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
@@ -314,12 +315,12 @@ def query5():  # returns the payment value, price and installments for each orde
         print(element)
 
 
-def query6():  # number of orders for a specific city and a specific payment_type
+def query6(): 
     import mysql.connector as mysql
     from mysql.connector import Error
     import pandas as pd
 
-    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
+    data = pd.read_csv(file_path+"/customer_segmentation.csv")
     possible_cities = []
     possible_payment_types = []
     for city in data["customer_city"]:
@@ -336,7 +337,7 @@ def query6():  # number of orders for a specific city and a specific payment_typ
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
 
@@ -348,68 +349,67 @@ def query6():  # number of orders for a specific city and a specific payment_typ
     where c.customer_unique_id = o.order_customer and c.customer_city = %s and o.payment_type = %s;
 
     """,
-        (city, payment_type),
+        (city, payment_type), 
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
     for element in result:
         print(element)
 
-
-def query7():  # return the avarage payment value for a specific payment type
+ 
+def query7():
     import mysql.connector as mysql
     from mysql.connector import Error
     import pandas as pd
 
-    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
-    possible_payment_types = []
-    for payments in data["payment_type"]:
-        if payments not in possible_payment_types:
-            possible_payment_types.append(payments)
-    payment_type = list(input("please enter the desired payment type "))
-    print("Possible payment types to select: ", possible_payment_types)
+    data = pd.read_csv(file_path+"/customer_segmentation.csv")
+    possible_types = []
+    for types in data["payment_type"]:
+        if types not in possible_types:
+            possible_types.append(types)
+    print("Possible cities to select: ", possible_types)
 
+    payment_type = input("please enter the desired payment type: ")
     mydb = mysql.connect(
         host="localhost",
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
         """
-    select round(avg(o.payment_value)), o.payment_type from order_ as o
-    where o.payment_type = %s;
+        select avg(o.payment_value), o.payment_type from order_ as o
+        where o.payment_type = %s;
     """,
-        (payment_type),
+        (payment_type,)
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
     for element in result:
         print(element)
-
 
 def query8():
     import mysql.connector as mysql
     from mysql.connector import Error
     import pandas as pd
 
-    data = pd.read_csv("C:/Users/Tommy/Documents/GitHub/DatabaseProject/customer_segmentation.csv")
+    data = pd.read_csv(file_path+"/customer_segmentation.csv")
     possible_cities = []
     for city in data["customer_city"]:
         if city not in possible_cities:
             possible_cities.append(city)
     print("Possible cities to select: ", possible_cities)
 
-    amount = int(input("please enter minimum amount \n"))
-    city = input("please enter the desired city \n")
+    amount = int(input("please enter minimum amount: "))
+    city = input("please enter the desired city: ")
     mydb = mysql.connect(
         host="localhost",
         user=username,
         password=password,
         auth_plugin="mysql_native_password",
-    )  # you can add the auth_plugin here too (ref line 26)
+    ) 
     mycursor = mydb.cursor()
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
@@ -424,6 +424,9 @@ def query8():
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
+    if len(result) == 0:
+        print('There are no orders in this city with amount: ',amount)
+        return None
     for element in result:
         print(element)
 
@@ -432,7 +435,7 @@ if __name__ == "__main__":
     print("Welcome to our project!\n")
     load_data("customer_segmentation.csv")
 
-    valid_choices = ["1", "2", "3", "4", "5", "6", "7", "8", "quit"]
+    valid_choices = [ "Query to show the number of orders for each product: ","1","Query to show the number of orders for each city: ", "2", "Query to show the number of orders for each customer: ","3","Query to show the avarage number of installments: ", "4","Query to show the avarage number of installments: ", "5","Query to show the number of orders for your desired city and payment type: ", "6","query will show the average payment value for the desired payment type: ", "7","Query to show the customers that have spent at least the desired amount and living in the determined city: ", "8", "quit"]
 
     while True:
         print("possible choices: \n")
