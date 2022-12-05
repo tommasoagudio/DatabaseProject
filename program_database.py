@@ -254,10 +254,10 @@ def query3():
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
         """
-    select count(c.customer_id),C.customer_id from customer as c, order_ as o
-    where c.customer_unique_id = o.order_customer
-    group by c.customer_id
-    order by count(c.customer_unique_id) DESC;
+    select count(s.seller_id),s.seller_id from seller as s, order_ as o
+    where s.seller_id = o.order_seller
+    group by s.seller_id
+    order by count(s.seller_id) DESC;
     """
     )
     mycursor.execute(sql)
@@ -435,7 +435,7 @@ if __name__ == "__main__":
     print("Welcome to our project!\n")
     load_data("customer_segmentation.csv")
 
-    valid_choices = [ "Query to show the number of orders for each product: ","1","Query to show the number of orders for each city: ", "2", "Query to show the number of orders for each customer: ","3","Query to show the avarage number of installments: ", "4","Query to show the avarage number of installments: ", "5","Query to show the number of orders for your desired city and payment type: ", "6","query will show the average payment value for the desired payment type: ", "7","Query to show the customers that have spent at least the desired amount and living in the determined city: ", "8", "quit"]
+    valid_choices = [ "Query to show the number of orders for each product: ","1","Query to show the number of orders for each city: ", "2", "Query to show the number of orders sold by sellers: ","3","Query to show the avarage number of installments: ", "4","Query to show the avarage number of installments: ", "5","Query to show the number of orders for your desired city and payment type: ", "6","query will show the average payment value for the desired payment type: ", "7","Query to show the customers that have spent at least the desired amount and living in the determined city: ", "8", "quit"]
 
     while True:
         print("possible choices: \n")
@@ -458,7 +458,7 @@ if __name__ == "__main__":
             query2()
             continue
         elif choice == "3":
-            print("This query will show the number of orders for each customer \n")
+            print("This query will show the number of orders sold by each seller \n")
             query3()
             continue
         elif choice == "4":
