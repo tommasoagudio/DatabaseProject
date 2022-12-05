@@ -282,12 +282,12 @@ def query3():
     mycursor.execute(sql)
     result = mycursor.fetchall()
     df=pd.DataFrame(result)
-    df.columns=["Occurencies","Cities"]
+    df.columns=["Occurencies","Seller"]
     print(df)
-    df.plot(x="Cities" , kind='bar')
-    plt.xlabel("Cities")
+    df.plot(x="Seller" , kind='Occurencies')
+    plt.xlabel("Sellers")
     plt.ylabel('Number of occurencies')
-    plt.title('Frequence of different Cities')
+    plt.title('Frequency of different Sellers')
     for element in result:
         print(element)
 
@@ -352,13 +352,15 @@ def query6():
     data = pd.read_csv(file_path+"/customer_segmentation.csv")
     possible_cities = []
     possible_payment_types = []
-    for city in data["customer_city"]:
-        if city not in possible_cities:
-            possible_cities.append(city)
+    yes_no = input('Do you want to see the list of all possible cities? ').lower()
+    if yes_no == 'yes':
+        for city in data["customer_city"]:
+            if city not in possible_cities:
+                possible_cities.append(city)
+        print("Possible cities to select: ", possible_cities)
     for payments in data["payment_type"]:
         if payments not in possible_payment_types:
             possible_payment_types.append(payments)
-    print("Possible cities to select: ", possible_cities)
     print("")
     print("Possible payment types to select: ", possible_payment_types)
     mydb = mysql.connect(
@@ -396,7 +398,7 @@ def query7():
     for types in data["payment_type"]:
         if types not in possible_types:
             possible_types.append(types)
-    print("Possible cities to select: ", possible_types)
+    print("Possible payment types to select: ", possible_types)
 
     payment_type = input("please enter the desired payment type: ")
     mydb = mysql.connect(
@@ -426,13 +428,21 @@ def query8():
 
     data = pd.read_csv(file_path+"/customer_segmentation.csv")
     possible_cities = []
-    for city in data["customer_city"]:
-        if city not in possible_cities:
-            possible_cities.append(city)
-    print("Possible cities to select: ", possible_cities)
+    yes_no = input('Do you want to see the list of all possible cities? ').lower()
+    if yes_no == 'yes':
+        for city in data["customer_city"]:
+            if city not in possible_cities:
+                possible_cities.append(city)
+        print("Possible cities to select: ", possible_cities)
 
     amount = int(input("please enter minimum amount: "))
     city = input("please enter the desired city: ")
+    possible_types = []
+    for types in data["payment_type"]:
+        if types not in possible_types:
+            possible_types.append(types)
+    print("Possible payment types to select: ", possible_types)
+    payment_type = input('please enter the desired payment type: ')
     mydb = mysql.connect(
         host="localhost",
         user=username,
@@ -443,13 +453,11 @@ def query8():
     mycursor.execute("USE CustomersDatabase1")
     sql = mycursor.execute(
         """
-        select c.customer_id, sum(o.payment_value) as x, c.customer_city from customer as c, order_ as o
-        where c.customer_unique_id = o.order_customer and c.customer_city = %s
-        group by c.customer_id,o.payment_value, c.customer_city
-        having x > %s
-        order by o.payment_value DESC;
+        select count(c.customer_id), sum(o.payment_value) as x, c.customer_city, o.payment_type from customer as c, order_ as o
+        where c.customer_unique_id = o.order_customer and c.customer_city = %s and o.payment_type = %s
+        having x > %s;
     """,
-        (city, amount),
+        (city,payment_type, amount,),
     )
     mycursor.execute(sql)
     result = mycursor.fetchall()
@@ -464,7 +472,7 @@ if __name__ == "__main__":
     print("Welcome to our project!\n")
     load_data("customer_segmentation.csv")
 
-    valid_choices = [ "Query to show the number of orders for each product: ","1","Query to show the number of orders for each city: ", "2", "Query to show the number of orders sold by sellers: ","3","Query to show the avarage number of installments: ", "4","Query to show the avarage number of installments: ", "5","Query to show the number of orders for your desired city and payment type: ", "6","query will show the average payment value for the desired payment type: ", "7","Query to show the customers that have spent at least the desired amount and living in the determined city: ", "8", "quit"]
+    valid_choices = [ "Query to show the number of orders for each product: ","1","Query to show the number of orders for each city: ", "2", "Query to show the number of orders sold by sellers: ","3","Query to show the avarage number of installments: ", "4","Query to show the avarage number of installments: ", "5","Query to show the number of orders for your desired city and payment type: ", "6","query will show the average payment value for the desired payment type: ", "7","Query to show the number of customers that have spent at least the desired amount and living in the determined city: ", "8", "quit"]
 
     while True:
         print("possible choices: \n")
@@ -514,7 +522,7 @@ if __name__ == "__main__":
             continue
         elif choice == "8":
             print(
-                "This query will show the customers that have spent at least the desired amount and living in the determined city \n"
+                "This query will show the number of customers that have spent at least the desired amount, are living in a determined city and have used a specific payment type \n"
             )
             query8()
             continue
